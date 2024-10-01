@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Patient } from "../../types";
-import { Table, TableBody, TableCell, TableHead, TableRow, Alert } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow, Alert, List, ListItemText, ListItemButton } from "@mui/material";
 import { Male, Female } from '@mui/icons-material';
 import patientService from "../../services/patients";
 
@@ -33,7 +33,7 @@ export default function PatientInfoPage() {
   else if (patient.gender === "female") genderIcon = <Female />;
 
   return (
-    <Table style={{ width: 360 }}>
+    <Table>
       <TableHead>
         <TableRow>
           <TableCell>
@@ -54,7 +54,27 @@ export default function PatientInfoPage() {
           <TableCell>Occupation</TableCell>
           <TableCell>{patient.occupation}</TableCell>
         </TableRow>
+        <TableRow>
+          <TableCell>Entries</TableCell>
+          {patient.entries?.map(entry => (
+            <TableCell key={entry.id} style={{ display: "flex" }}>
+              <List>
+                <ListItemText
+                  primary={entry.description}
+                  secondary={entry.date}
+                />
+                <List>
+                  {entry.diagnosisCodes?.map(code => (
+                    <ListItemButton key={code}>
+                      <ListItemText primary={code} />
+                    </ListItemButton>
+                  ))}
+                </List>
+              </List>
+            </TableCell>
+          ))}
+        </TableRow>
       </TableBody>
-    </Table>
+    </Table >
   );
 }
