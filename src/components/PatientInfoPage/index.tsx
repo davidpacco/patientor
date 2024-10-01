@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Patient } from "../../types";
-import { Table, TableBody, TableCell, TableHead, TableRow, Alert, List, ListItemText, ListItemButton } from "@mui/material";
+import { Diagnosis, Patient } from "../../types";
+import { Table, TableBody, TableCell, TableHead, TableRow, Alert, List, ListItemText, ListItem } from "@mui/material";
 import { Male, Female } from '@mui/icons-material';
 import patientService from "../../services/patients";
 
-export default function PatientInfoPage() {
+interface Props {
+  diagnoses: Diagnosis[]
+}
+
+export default function PatientInfoPage({ diagnoses }: Props) {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const id = useParams().id;
@@ -65,9 +69,11 @@ export default function PatientInfoPage() {
                 />
                 <List>
                   {entry.diagnosisCodes?.map(code => (
-                    <ListItemButton key={code}>
-                      <ListItemText primary={code} />
-                    </ListItemButton>
+                    <ListItem key={code}>
+                      <ListItemText
+                        primary={`${code} - ${diagnoses.find(d => d.code === code)?.name}`}
+                      />
+                    </ListItem>
                   ))}
                 </List>
               </List>
