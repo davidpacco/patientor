@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Alert, Button } from 
 import { Male, Female } from '@mui/icons-material';
 import patientService from "../../services/patients";
 import PatientEntry from "../PatientEntry";
+import AddEntryModal from "../AddEntryModal";
 
 interface Props {
   diagnoses: Diagnosis[]
@@ -13,7 +14,11 @@ interface Props {
 export default function PatientInfoPage({ diagnoses }: Props) {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const id = useParams().id;
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   useEffect(() => {
     setLoading(true);
@@ -76,7 +81,11 @@ export default function PatientInfoPage({ diagnoses }: Props) {
           </TableRow>
         </TableBody>
       </Table >
-      <Button variant="contained">Add new entry</Button>
+      <Button
+        variant="contained"
+        onClick={openModal}
+      >Add new entry</Button>
+      <AddEntryModal open={modalOpen} closeModal={closeModal} id={patient.id} />
     </>
   );
 }
